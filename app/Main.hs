@@ -192,5 +192,3 @@ main = do
     
     print s
     appendFile "log.txt" $ unpack w
-    --env = cli
-    --draw env gameState:
