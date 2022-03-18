@@ -48,7 +48,7 @@ initGame env =
     in
         GameState {snake = [sPos]
                     , rat = rPos
-                    , score = 0
+                    , score = 1
                     , direction = R
                   }
 
@@ -86,15 +86,14 @@ moveSnake direction snake =
         rmLastEl [x] = []
         rmLastEl (x:xs) = x:rmLastEl xs 
 
-isLost:: Env -> GameState -> Bool 
-isLost env gameState =
-    let (pos:xs) = snake gameState
-        nduplicate = nub $ (pos:xs)
-        fstHeadSnake = fst $ pos
-        sndHeadSnake = snd $ pos
+isLost:: Env -> Snake -> Snake -> Bool 
+isLost env (npos:nxs) (pos:xs) =
+    let fstHeadSnake = fst pos
+        sndHeadSnake = snd pos
         cols = ncols env
     in 
-        (pos `elem` xs) || (fstHeadSnake <= 0) || (sndHeadSnake <= 0) || (fstHeadSnake > cols) || (sndHeadSnake > cols)
+        (npos `elem` (pos:xs)) || (fstHeadSnake <= 0) || (sndHeadSnake <= 0) || (fstHeadSnake > cols) || (sndHeadSnake > cols)
+isLost _ _ _ = False 
 
 draw :: Env -> GameState -> IO()
 draw env  gameState = do
@@ -114,7 +113,6 @@ draw env  gameState = do
 clearScreen:: IO ()
 clearScreen = putStr "\ESC[2J"
 
-
 --isADead
 cli:: IO (Matrix Char)
 cli = do
@@ -123,8 +121,8 @@ cli = do
 
 parseArgs:: [String] -> Matrix Char
 parseArgs [c] 
-    | (Prelude.read c >= 4) && (Prelude.read c <= 12)  = matrix (Prelude.read c) (Prelude.read c) (\(i, j) -> ' ')
-    | otherwise = error "Invalid argument use a number between 4 and 12"
+    | (Prelude.read c >= 4) && (Prelude.read c <= 15) = matrix (Prelude.read c) (Prelude.read c) (\(i, j) -> ' ')
+    | otherwise = error "Invalid argument use a number between 4 and 15"
 
 parseDirection:: String -> Direction
 parseDirection s 
@@ -149,7 +147,7 @@ runApp = do
             newGameState = gameState {snake = newSnakePos}
         ln <- lift $ logEvent ("New snake position: " ++ show newSnakePos ++ " direction: " ++ show direction )
         tell ln
-        if isLost env newGameState
+        if isLost env (snake newGameState) (snake gameState)
             then do
                 ln <- lift $ logEvent ("GAME OVER - gamestate: " ++ show gameState)
                 tell ln 
@@ -179,16 +177,13 @@ runApp = do
 
 main :: IO ()
 main = do
-    let env = matrix 10 10 (\(x,y) -> ' ')
-        gameState = initGame env
-    
+    env <- cli 
+    let gameState = initGame env
     (s,w) <- execRWST(do 
                         ln <- lift $ logEvent "READY PLAYER ONE"
                         tell ln
                         runApp
                         ln' <- lift $ logEvent "GAME ENDED\n\n\n"
                         tell ln') env gameState
-                        
-    
     print s
     appendFile "log.txt" $ unpack w
