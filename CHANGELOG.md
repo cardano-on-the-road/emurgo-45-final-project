@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 # Revision history for emurgo45-evenodd
 
 ## 0.1.1.0 -- 2022-03-28
@@ -30,4 +28,3 @@ VM -> Done
 
 
 ### 9. Basically any piece of code you felt was repetitive or hard to write or hard to read should be rewritten. Overall looks good to me! Will wait for some of the minor changes before final approval
->>>>>>> dev
