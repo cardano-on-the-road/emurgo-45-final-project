@@ -10,10 +10,7 @@ import              Data.Text                                           (append,
 import              Data.Matrix
 import              Data.Tuple.Extra                                    (first, second)
 import              System.Environment                                  (getArgs)
-
 import              Data.List
-
-
 import              Types
 import              Draw                                           (draw, clearScreen)
 import              Data.Maybe
@@ -43,14 +40,8 @@ runApp = do
         then do
         let newSnakePos = moveSnake direction (snake gameState)
             newGameState = gameState {snake = newSnakePos}
-<<<<<<< HEAD
-        ln <- lift $ logEvent ("New snake position: " ++ show newSnakePos ++ " direction: " ++ show direction )
-        tell ln
-        if isLost env (snake newGameState) (snake gameState)
-=======
         (tell . logEvent) ("New snake position: " ++ show newSnakePos ++ " direction: " ++ show direction )
         if isLost env newSnakePos $ snake gameState
->>>>>>> dev
             then do
                 (tell . logEvent) ("GAME OVER - gamestate: " ++ show gameState)
                 lift $ putStrLn ("GAME OVER - gamestate: " ++ show gameState)
@@ -79,17 +70,6 @@ runApp = do
 
 main :: IO ()
 main = do
-<<<<<<< HEAD
-    env <- cli 
-    let gameState = initGame env
-    (s,w) <- execRWST(do 
-                        ln <- lift $ logEvent "READY PLAYER ONE"
-                        tell ln
-                        runApp
-                        ln' <- lift $ logEvent "GAME ENDED\n\n\n"
-                        tell ln') env gameState
-    print s
-=======
     env <- cli
     let gameState = initGame env
     (s,w') <- execRWST(do
@@ -99,5 +79,4 @@ main = do
                         ) env gameState
     print s
     w <- w'
->>>>>>> dev
     appendFile "log.txt" $ unpack w
