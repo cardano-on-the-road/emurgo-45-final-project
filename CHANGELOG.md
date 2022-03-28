@@ -8,8 +8,7 @@
 -> VM:  Done
 
 ### 2. Why do you need NA in Direction - Use Maybe Direction instead
--> VM: I should add MaybeT. I would need an example to combine it with RSWT because execRWST doesn’t work anymore
-
+-> VM: I should combine MaybeT with RSWT + IO. I would need an help to do it.
 
 ### 3. Can't you combine logEvent and tell 
 -> VM: Done
@@ -23,7 +22,6 @@
 
 ### 7. You can make the drawing logic simpler by creating an Env -> GameState -> String function And use a separate state monad computation for that Where state is the Matrix
 VM -> It’s true. This is the best way. I decided to print the matrix to not create manually the string
-
 
 ### 8. Also modularise the code, everything is in a single file right now
 VM -> Done
