@@ -1,6 +1,6 @@
 cabal-version:      2.4
 name:               emurgo45-snake
-version:            0.1.0.0
+version:            0.1.1.0
 
 -- A short (one-line) description of the package.
 -- synopsis:
@@ -25,7 +25,10 @@ executable emurgo45-snake
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    -- other-modules:
+    other-modules:  Controller,
+                    Draw,
+                    Types,
+                    Logger
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
